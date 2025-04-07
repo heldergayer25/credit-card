@@ -9,6 +9,8 @@ import br.com.altbank.api.credit.card.domain.Card;
 import br.com.altbank.api.credit.card.domain.Customer;
 import br.com.altbank.api.credit.card.dto.AccountDTO;
 import br.com.altbank.api.credit.card.dto.AccountResponse;
+import br.com.altbank.api.credit.card.enums.DeliveryStatus;
+import br.com.altbank.api.credit.card.exception.BusinessException;
 import br.com.altbank.api.credit.card.repository.AccountRepository;
 import br.com.altbank.api.credit.card.repository.CardRepository;
 import br.com.altbank.api.credit.card.repository.CustomerRepository;
@@ -45,7 +47,7 @@ public class AccountService /*implements IAccountService*/ {
     }*/
 
     @Transactional    
-    public AccountResponse createAccount(AccountDTO dto) {
+    public AccountResponse createAccount(AccountDTO dto) throws BusinessException {
         this.validateIfActiveAccountExistsByDocument(dto.getCustomer().getDocument());
         // Cliente
         Customer customer = new Customer();
@@ -64,6 +66,9 @@ public class AccountService /*implements IAccountService*/ {
         physical.cardNumber = generateCardNumber();
         physical.type = "PHYSICAL";
         physical.account = account;
+        physical.cvv = this.generateCVV();
+        physical.trackingId = this.generateTracking();
+        physical.deliveryStatus = DeliveryStatus.IN_TRANSIT.name();
 
         account.setCards(List.of(physical));
         this.customerRepo.persist(customer);
@@ -71,13 +76,13 @@ public class AccountService /*implements IAccountService*/ {
         return new AccountResponse(account);
     }
 
-    private void validateIfActiveAccountExistsByDocument(String document) {
+    private void validateIfActiveAccountExistsByDocument(String document) throws BusinessException {
         boolean exists = Account.find("customer.document = ?1 and active = ?2", document, true)
                                 .firstResultOptional()
                                 .isPresent();
     
         if (exists) {
-            throw new IllegalStateException("Já existe uma conta ativa para o documento informado: " + document);
+            throw new BusinessException("Já existe uma conta ativa para o documento informado: " + document);
         }
     }
 
@@ -116,7 +121,7 @@ public class AccountService /*implements IAccountService*/ {
     }*/
 
     private String generateCardNumber() {
-        return UUID.randomUUID().toString().substring(0, 16);
+        return this.randomNumber(16);
     }
 
     private String generateAccountNumber() {
@@ -127,7 +132,7 @@ public class AccountService /*implements IAccountService*/ {
         return this.randomNumber(4);
     }
 
-    private String randomNumber2(int index) {
+    private String randomDelivery(int index) {
         return UUID.randomUUID().toString().substring(0, index);
     }
 
@@ -144,5 +149,9 @@ public class AccountService /*implements IAccountService*/ {
 
     private String generateCVV() {
         return String.valueOf(new Random().nextInt(900) + 100);
+    }
+
+    private String generateTracking() {
+        return this.randomDelivery(32);
     }
 }

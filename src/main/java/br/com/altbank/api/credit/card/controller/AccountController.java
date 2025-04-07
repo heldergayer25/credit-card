@@ -1,10 +1,13 @@
 package br.com.altbank.api.credit.card.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 
 import br.com.altbank.api.credit.card.dto.AccountDTO;
 import br.com.altbank.api.credit.card.dto.AccountResponse;
+import br.com.altbank.api.credit.card.exception.BusinessException;
 import br.com.altbank.api.credit.card.service.AccountService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -12,40 +15,38 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Controller das contas e clientes.
+ */
 @Path("/accounts")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Slf4j
-public class AccountController {
+public class AccountController implements IAccountController {
 
+    // Módulo de serviço de contas
     @Inject
     private AccountService accountService;
 
-    @GET
-    @Path("health")
-    public Response health() throws Exception {
-        //throw new Exception("Teste...");
+    @Override
+    public Response health() {
         return Response.ok("OK").build();
     }
 
-    @POST    
-    public Response createAccount(@Valid AccountDTO dto) throws JsonProcessingException { 
+    @Override    
+    public Response createAccount(@Valid AccountDTO dto) throws BusinessException { 
         AccountResponse account = this.accountService.createAccount(dto);
         return Response.ok(account).build();        
     }    
 
-    @DELETE
-    @Path("/{document}")
+    @Override
     public Response cancelAccount(@PathParam("document") String document) {
-            accountService.cancelAccountByDocument(document);
+            this.accountService.cancelAccountByDocument(document);
             return Response.ok().build();
     }
 

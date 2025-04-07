@@ -1,63 +1,52 @@
-# credit-card
-Credit card api example
+# Projeto Altbank API Credit Card
 
-# cartao-credito
+Este projeto é uma API REST desenvolvida com Quarkus para gerenciar contas, cartões e webhooks relacionados a cartões de crédito.
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+## Funcionalidades Principais
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+* Criação de contas com cartões físicos associados.
+* Cancelamento de contas por documento do cliente.
+~~* Emissão de cartões virtuais para contas existentes.~~ 
+~~* Validação e reemissão de cartões.~~
+~~* Atualização de CVV de cartões.~~
+* Recebimento de webhooks para status de entrega.
+~~* Recebimento de webhooks para atualizações de CVV.~~
+* Documentação da API com Swagger UI.
 
-## Running the application in dev mode
+## Tecnologias Utilizadas
 
-You can run your application in dev mode that enables live coding using:
+* Quarkus
+* Java
+* JPA (Hibernate Panache)
+* JUnit 5
+* Mockito
+* RestAssured
+* Swagger UI
 
-```shell script
-./mvnw quarkus:dev
-```
+## Como Executar
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+1.  Clone o repositório.
+2.  Execute `mvn clean compile quarkus:dev` para iniciar o Quarkus Dev Mode.
+3.  Acesse a documentação da API em `http://localhost:8080/swagger/`.
 
-## Packaging and running the application
+## Testes
 
-The application can be packaged using:
+* Testes unitários para os controllers e serviços.
+* Execução dos testes com `mvn test`.
 
-```shell script
-./mvnw package
-```
+## Webhooks
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+* Endpoints para receber webhooks de status de entrega e atualizações de CVV.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+## Configuração
 
-If you want to build an _über-jar_, execute the following command:
+* Configurações no arquivo `application.properties`.
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
+## Dependências
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+* As dependências estão definidas no arquivo `pom.xml`.
 
-## Creating a native executable
+## Parâmetros
 
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/cartao-credito-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- Hibernate ORM ([guide](https://quarkus.io/guides/hibernate-orm)): Define your persistent model with Hibernate ORM and Jakarta Persistence
-- Hibernate Validator ([guide](https://quarkus.io/guides/validation)): Validate object properties (field, getter) and method parameters for your beans (REST, CDI, Jakarta Persistence)
-- JDBC Driver - MySQL ([guide](https://quarkus.io/guides/datasource)): Connect to the MySQL database via JDBC
+* ApiKey para endpoint de atualização do status de entrega do cartão
+tracking.api.key=26372ce8-48c3-4924-9ea5-6561c954

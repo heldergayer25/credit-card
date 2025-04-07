@@ -17,8 +17,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-//@Data
-//@Builder(toBuilder = true)
 @Entity
 @Table(name="account")
 public class Account extends PanacheEntity {
