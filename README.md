@@ -8,10 +8,10 @@ Este projeto é uma API REST desenvolvida com Quarkus para gerenciar contas, car
 * Cancelamento de contas por documento do cliente.
 * Recebimento de webhooks para status de entrega.
 * Documentação da API com Swagger UI.
-~~ Emissão de cartões virtuais para contas existentes. 
-~~ Validação e reemissão de cartões.
-~~ Atualização de CVV de cartões.
-~~ Recebimento de webhooks para atualizações de CVV.
+* ~~Emissão de cartões virtuais para contas existentes.~~ 
+* ~~Validação e reemissão de cartões.~~
+* ~~Atualização de CVV de cartões.~~ 
+* ~~Recebimento de webhooks para atualizações de CVV.~~
 
 
 ## Tecnologias Utilizadas
